@@ -17,13 +17,15 @@ export class HeroApiService {
     total$ = this.totalBS.asObservable();
 
     heroes$ = of(false).pipe(
-        switchMap(() => {
+        map(() => {
             const params: any = {
                 apikey: environment.MARVEL_API.PUBLIC_KEY,
                 offset: 0,
                 limit: 40,
             };
-
+            return params;
+        }),
+        switchMap((params) => {
             // @ts-ignore
             return this.http.get(`${MARVEL_GATEWAY}/v1/public/characters`, {
                 params,

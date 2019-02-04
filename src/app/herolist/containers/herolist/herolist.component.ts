@@ -1,20 +1,51 @@
 import { Component, OnInit } from '@angular/core';
-import { HeroApiService } from '../../../shared/services/hero-api.service';
+import { HeroApiService, LIMITS } from '../../../shared/services/hero-api.service';
 
 @Component({
     template: `
-        <div class="hero" *ngFor="let hero of (heroes$ | async)">
-            <div class="name" [title]="hero.name">{{ hero.name }}</div>
-            <app-hero-image
-                [path]="hero.thumbnail.path"
-                size="medium"
-                layout="portrait"
-            ></app-hero-image>
+        <div class="list-header">
+            <div>
+                Total - <span>{{ total$ | async }}</span>
+            </div>
+            <div *ngIf="(page$ | async) !== undefined">
+                Page - <span>{{ (page$ | async) + 1 }} of {{ totalPages$ | async }}</span
+                >&nbsp;&nbsp;&nbsp;<span
+                    ><button (click)="shiftPage(-1)" [disabled]="(page$ | async) < 1">Prev</button
+                    ><button (click)="shiftPage(1)" [disabled]="isLastPage$ | async">
+                        Next
+                    </button></span
+                >
+            </div>
+            <div>
+                Show {{ limit$ | async }} results
+                <span>
+                    <button *ngFor="let l of limits" (click)="setLimit(l)">{{ l }}</button>
+                </span>
+            </div>
+        </div>
+        <div class="list">
+            <div class="hero" *ngFor="let hero of (heroes$ | async)">
+                <div class="name" [title]="hero.name">{{ hero.name }}</div>
+                <app-hero-image
+                    [path]="hero.thumbnail.path"
+                    size="medium"
+                    layout="portrait"
+                ></app-hero-image>
+            </div>
         </div>
     `,
     styles: [
         `
             :host {
+                display: flex;
+                flex-direction: column;
+            }
+            .list-header {
+                display: flex;
+                flex-direction: column;
+                margin: 10px 20px 20px 20px;
+            }
+            .list {
                 display: flex;
                 flex-wrap: wrap;
             }
@@ -38,8 +69,23 @@ import { HeroApiService } from '../../../shared/services/hero-api.service';
 })
 export class HerolistComponent implements OnInit {
     heroes$ = this.heroApi.heroes$;
+    total$ = this.heroApi.total$;
+    page$ = this.heroApi.page$;
+    limit$ = this.heroApi.limit$;
+    totalPages$ = this.heroApi.totalPages$;
+    isLastPage$ = this.heroApi.isLastPage$;
+
+    limits = LIMITS;
 
     constructor(private heroApi: HeroApiService) {}
 
     ngOnInit() {}
+
+    shiftPage(num) {
+        this.heroApi.shiftPage(num);
+    }
+
+    setLimit(num) {
+        this.heroApi.setLimit(num);
+    }
 }

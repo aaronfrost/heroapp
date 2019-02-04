@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Route, RouterModule } from '@angular/router';
+import { SharedModule } from '../shared/shared.module';
 import { HerolistComponent } from './containers/herolist/herolist.component';
 
 const routes: Route[] = [
@@ -11,7 +12,7 @@ const routes: Route[] = [
 ];
 
 @NgModule({
-    imports: [CommonModule, RouterModule.forChild(routes)],
+    imports: [CommonModule, RouterModule.forChild(routes), SharedModule],
     declarations: [HerolistComponent],
 })
 export class HerolistModule {}

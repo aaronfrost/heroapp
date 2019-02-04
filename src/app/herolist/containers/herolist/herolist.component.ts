@@ -4,8 +4,12 @@ import { HeroApiService } from '../../../shared/services/hero-api.service';
 @Component({
     template: `
         <div class="hero" *ngFor="let hero of (heroes$ | async)">
-            <div>{{ hero.name }}</div>
-            <img [src]="hero.thumbnail.path + '/portrait_medium.' + hero.thumbnail.extension" />
+            <div class="name" [title]="hero.name">{{ hero.name }}</div>
+            <app-hero-image
+                [path]="hero.thumbnail.path"
+                size="medium"
+                layout="portrait"
+            ></app-hero-image>
         </div>
     `,
     styles: [
@@ -21,6 +25,13 @@ import { HeroApiService } from '../../../shared/services/hero-api.service';
                 display: flex;
                 flex-direction: column;
                 align-items: center;
+            }
+            .name {
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+                width: 140px;
+                text-align: center;
             }
         `,
     ],

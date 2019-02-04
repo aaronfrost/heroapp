@@ -22,6 +22,7 @@ import { HeroApiService, LIMITS } from '../../../shared/services/hero-api.servic
                     <button *ngFor="let l of limits" (click)="setLimit(l)">{{ l }}</button>
                 </span>
             </div>
+            <div>Search: <input [ngModel]="search" (ngModelChange)="doSearch($event)" /></div>
         </div>
         <div class="list">
             <div class="hero" *ngFor="let hero of (heroes$ | async)">
@@ -76,6 +77,7 @@ export class HerolistComponent implements OnInit {
     isLastPage$ = this.heroApi.isLastPage$;
 
     limits = LIMITS;
+    search = '';
 
     constructor(private heroApi: HeroApiService) {}
 
@@ -87,5 +89,9 @@ export class HerolistComponent implements OnInit {
 
     setLimit(num) {
         this.heroApi.setLimit(num);
+    }
+
+    doSearch(text) {
+        this.heroApi.setStartsWith(text);
     }
 }

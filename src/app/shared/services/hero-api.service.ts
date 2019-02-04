@@ -20,6 +20,7 @@ export class HeroApiService {
     private totalBS = new BehaviorSubject(0);
     private pageBS = new BehaviorSubject(0);
     private limitBS = new BehaviorSubject(LIMIT_LOW);
+    private startsWithBS = new BehaviorSubject('');
 
     total$ = this.totalBS.asObservable();
     page$ = this.pageBS.asObservable();
@@ -30,14 +31,21 @@ export class HeroApiService {
     isLastPage$ = combineLatest(this.totalPages$, this.page$).pipe(
         map(([totalPages, page]) => totalPages === page + 1),
     );
+    startsWith$ = this.startsWithBS.asObservable();
 
-    heroes$ = combineLatest(this.page$, this.limit$).pipe(
-        map(([page, limit]) => {
+    heroes$ = combineLatest(this.page$, this.limit$, this.startsWith$).pipe(
+        map(([page, limit, startsWith]) => {
             const params: any = {
                 apikey: environment.MARVEL_API.PUBLIC_KEY,
                 offset: page * limit,
                 limit: limit,
             };
+
+            // Only add if exists, otherwise error on server
+            if (startsWith) {
+                params.nameStartsWith = startsWith;
+            }
+
             return params;
         }),
         switchMap((params) => {
@@ -70,5 +78,9 @@ export class HeroApiService {
 
     setLimit(num) {
         this.limitBS.next(num);
+    }
+
+    setStartsWith(text) {
+        this.startsWithBS.next(text);
     }
 }

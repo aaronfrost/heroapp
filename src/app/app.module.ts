@@ -11,6 +11,10 @@ const routes: Route[] = [
         path: '',
         loadChildren: './herolist/herolist.module#HerolistModule',
     },
+    {
+        path: 'hero',
+        loadChildren: './herodetail/herodetail.module#HerodetailModule',
+    },
 ];
 
 @NgModule({

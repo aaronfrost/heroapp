@@ -25,14 +25,14 @@ import { HeroApiService, LIMITS } from '../../../shared/services/hero-api.servic
             <div>Search: <input [ngModel]="search" (ngModelChange)="doSearch($event)" /></div>
         </div>
         <div class="list">
-            <div class="hero" *ngFor="let hero of (heroes$ | async)">
+            <a class="hero" *ngFor="let hero of (heroes$ | async)" routerLink="/hero/{{ hero.id }}">
                 <div class="name" [title]="hero.name">{{ hero.name }}</div>
                 <app-hero-image
                     [path]="hero.thumbnail.path"
                     size="medium"
                     layout="portrait"
                 ></app-hero-image>
-            </div>
+            </a>
         </div>
     `,
     styles: [

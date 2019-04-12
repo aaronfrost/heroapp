@@ -3,18 +3,31 @@ import { HeroApiService } from '../../../shared/services/hero-api.service';
 
 @Component({
     template: `
-        <div class="hero" *ngFor="let hero of (heroes$ | async)">
-            <div class="name" [title]="hero.name">{{ hero.name }}</div>
-            <app-hero-image
-                [path]="hero.thumbnail.path"
-                size="medium"
-                layout="portrait"
-            ></app-hero-image>
+        <div class="list-header"></div>
+        <div class="list">
+            <div class="hero" *ngFor="let hero of (heroes$ | async)">
+                <div class="name" [title]="hero.name">{{ hero.name }}</div>
+                <app-hero-image
+                    [path]="hero.thumbnail.path"
+                    [extension]="hero.thumbnail.extension"
+                    size="medium"
+                    layout="portrait"
+                ></app-hero-image>
+            </div>
         </div>
     `,
     styles: [
         `
             :host {
+                display: flex;
+                flex-direction: column;
+            }
+            .list-header {
+                display: flex;
+                flex-direction: column;
+                margin: 10px 20px 20px 20px;
+            }
+            .list {
                 display: flex;
                 flex-wrap: wrap;
             }
